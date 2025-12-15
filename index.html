@@ -1,0 +1,2427 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Neural Arc">
+    <meta name="subject" content="IPC System Implementation Proposal">
+    <meta name="keywords" content="IPC, Healthcare, OutSystems, AI, Neural Arc, Helium AI">
+    <meta name="description" content="Technical Proposal for International Patient Care System Recovery and Implementation">
+    <title>IPC System Implementation Proposal - Neural Arc</title>
+    <style>
+        @media print {
+            @page {
+                margin: 0.5in;
+                size: A4;
+                @top-center {
+                    content: "IPC System Implementation Proposal - Neural Arc";
+                    font-size: 10pt;
+                    color: #666;
+                }
+                @bottom-center {
+                    content: "Created by Neural Arc | Page " counter(page);
+                    font-size: 9pt;
+                    color: #666;
+                }
+            }
+            body {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .cover-page {
+            text-align: center;
+            padding: 100px 40px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cover-page h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .cover-page .subtitle {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 60px;
+            line-height: 1.4;
+        }
+
+        .cover-page .rfq-number {
+            font-size: 18px;
+            color: #000;
+            font-weight: 600;
+            margin-bottom: 80px;
+            padding: 15px 30px;
+            border: 2px solid #000;
+            display: inline-block;
+        }
+
+        .cover-page .company-info {
+            margin-top: 80px;
+        }
+
+        .cover-page .company-name {
+            font-size: 36px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .cover-page .tagline {
+            font-size: 16px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .cover-page .date {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #000;
+            margin: 40px 0 20px 0;
+            border-bottom: 3px solid #000;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #000;
+            margin: 30px 0 15px 0;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin: 20px 0 10px 0;
+        }
+
+        h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin: 15px 0 10px 0;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .card h4 {
+            margin-top: 0;
+            color: #000;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .card ul {
+            margin: 10px 0 0 20px;
+        }
+
+        .card p {
+            text-align: left;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table th {
+            background: #000;
+            color: #fff;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table th:first-child {
+            border-top-left-radius: 8px;
+        }
+
+        table th:last-child {
+            border-top-right-radius: 8px;
+        }
+
+        table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        table tr:last-child td:first-child {
+            border-bottom-left-radius: 8px;
+        }
+
+        table tr:last-child td:last-child {
+            border-bottom-right-radius: 8px;
+        }
+
+        .highlight-box {
+            background: #f5f5f5;
+            border-left: 4px solid #000;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #000;
+            background: #fff;
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #000;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timeline {
+            margin: 30px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .timeline-item:last-child {
+            border-bottom: none;
+        }
+
+        .timeline-marker {
+            width: 80px;
+            font-weight: 700;
+            color: #000;
+            flex-shrink: 0;
+        }
+
+        .timeline-content h4 {
+            margin-top: 0;
+        }
+
+        .workflow-diagram {
+            margin: 30px 0;
+            padding: 30px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .workflow-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #000;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-right: 20px;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-arrow {
+            text-align: center;
+            font-size: 24px;
+            color: #000;
+            margin: 10px 0;
+        }
+
+        .pricing-summary {
+            background: #000;
+            color: #fff;
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        .pricing-summary h3 {
+            color: #fff;
+            margin: 0 0 10px 0;
+        }
+
+        .pricing-summary .amount {
+            font-size: 42px;
+            font-weight: 700;
+        }
+
+        .pricing-summary table {
+            border-radius: 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-box {
+            padding: 20px;
+            border: 1px solid #ddd;
+            background: #fff;
+            border-radius: 8px;
+        }
+
+        .feature-box h4 {
+            margin-top: 0;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .integration-diagram {
+            margin: 30px 0;
+            padding: 30px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .integration-layer {
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff;
+            border: 2px solid #000;
+            border-radius: 8px;
+        }
+
+        .integration-layer h4 {
+            margin: 0 0 10px 0;
+        }
+
+        .integration-arrow {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 2px solid #000;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        @media screen and (max-width: 768px) {
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Cover Page -->
+<div class="cover-page page-break">
+    <h1>Technical Proposal</h1>
+    <div class="subtitle">International Patient Care (IPC) System<br>Recovery, Completion & Deployment</div>
+    <div class="rfq-number">RFQ 651105000156</div>
+    
+    <div class="company-info">
+        <div class="company-name">Neural Arc</div>
+        <div class="tagline">Pioneering Generative AI Solutions for Enterprise Excellence</div>
+    </div>
+    
+    <div class="date">December 2025</div>
+</div>
+
+<!-- About Neural Arc - Part 1 -->
+<div class="section page-break">
+    <h1>About Neural Arc</h1>
+    
+    <h2>Who We Are</h2>
+    <p>Neural Arc is a specialized technology consultancy at the forefront of generative AI innovation, dedicated to delivering cutting-edge artificial intelligence solutions for businesses and enterprises worldwide. We are a team of expert AI engineers, data scientists, software architects, and domain specialists who share a common vision: to make advanced AI capabilities accessible, practical, and transformative for organizations of all sizes.</p>
+    
+    <p>Founded on the principle that artificial intelligence should augment human capabilities rather than replace them, Neural Arc has established itself as a trusted partner for organizations seeking to leverage generative AI for operational excellence, innovation, and competitive advantage. Our expertise spans the full spectrum of AI technologies, from natural language processing and computer vision to predictive analytics and autonomous agents.</p>
+    
+    <h2>Our Generative AI Expertise</h2>
+    <p>At Neural Arc, we specialize in generative AI—the transformative technology that enables machines to create, reason, and solve problems with human-like intelligence. Our work goes beyond traditional automation and rule-based systems. We design and implement AI solutions that can understand context, learn from data, generate insights, and execute complex workflows autonomously.</p>
+    
+    <p>Our generative AI capabilities include:</p>
+    
+    <div class="card-container">
+        <div class="card">
+            <h4>Natural Language Processing</h4>
+            <ul>
+                <li>Conversational AI and chatbots</li>
+                <li>Document understanding and extraction</li>
+                <li>Multilingual content generation</li>
+                <li>Sentiment analysis and classification</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>Intelligent Automation</h4>
+            <ul>
+                <li>Workflow orchestration and optimization</li>
+                <li>Autonomous decision-making systems</li>
+                <li>Process mining and improvement</li>
+                <li>Robotic process automation (RPA)</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>Predictive Analytics</h4>
+            <ul>
+                <li>Demand forecasting and planning</li>
+                <li>Risk assessment and mitigation</li>
+                <li>Anomaly detection and alerting</li>
+                <li>Performance prediction and optimization</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>Computer Vision</h4>
+            <ul>
+                <li>Document and image analysis</li>
+                <li>Object detection and classification</li>
+                <li>Medical imaging interpretation</li>
+                <li>Quality inspection automation</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h2>Introducing Helium AI</h2>
+    <p>At the heart of our generative AI capabilities is <strong>Helium AI</strong>, our proprietary autonomous deep agent platform that represents a breakthrough in intelligent automation. Helium is not just another AI tool—it's a full-spectrum autonomous agent capable of understanding complex requirements, planning multi-step workflows, and executing tasks across diverse domains with minimal human intervention.</p>
+    
+    <h3>What Makes Helium Unique</h3>
+    <p>Helium AI combines advanced reasoning capabilities with practical execution power, enabling it to:</p>
+    
+    <ul>
+        <li><strong>Understand Context:</strong> Helium comprehends nuanced requirements, interprets ambiguous instructions, and asks clarifying questions when needed</li>
+        <li><strong>Plan Intelligently:</strong> It breaks down complex tasks into logical steps, identifies dependencies, and creates efficient execution plans</li>
+        <li><strong>Execute Autonomously:</strong> Helium can perform research, analyze data, generate content, write code, interact with systems, and deliver results—all without constant supervision</li>
+        <li><strong>Learn and Adapt:</strong> The platform continuously improves its performance based on feedback and outcomes</li>
+        <li><strong>Integrate Seamlessly:</strong> Helium connects with existing enterprise systems through APIs, databases, and standard protocols</li>
+    </ul>
+    
+    <h3>Helium for Business & Enterprise</h3>
+    <p>Helium AI is specifically designed for business and enterprise environments where reliability, security, and compliance are paramount. Unlike consumer-focused AI tools, Helium is built with enterprise requirements in mind:</p>
+    
+    <div class="card-container">
+        <div class="card">
+            <h4>Enterprise Security</h4>
+            <ul>
+                <li>End-to-end encryption</li>
+                <li>Role-based access control</li>
+                <li>Audit logging and compliance</li>
+                <li>Data sovereignty support</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>Scalability</h4>
+            <ul>
+                <li>Handle thousands of concurrent tasks</li>
+                <li>Cloud-native architecture</li>
+                <li>Horizontal scaling capabilities</li>
+                <li>High availability design</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>Integration</h4>
+            <ul>
+                <li>RESTful API interfaces</li>
+                <li>Webhook support</li>
+                <li>Database connectivity</li>
+                <li>Legacy system integration</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>Customization</h4>
+            <ul>
+                <li>Domain-specific training</li>
+                <li>Custom workflow templates</li>
+                <li>Branded interfaces</li>
+                <li>Configurable business rules</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h3>Helium for End Users</h3>
+    <p>While Helium is powerful enough for complex enterprise workflows, it's also designed to be accessible to end users. Through natural language interfaces, users can interact with Helium conversationally, asking questions, requesting information, and delegating tasks without needing technical expertise. This dual capability—enterprise-grade power with consumer-grade simplicity—makes Helium uniquely valuable for organizations serving diverse stakeholder groups.</p>
+</div>
+
+<!-- About Neural Arc - Part 2 -->
+<div class="section page-break">
+    <h2>Our Track Record</h2>
+    <p>Neural Arc has successfully deployed generative AI solutions across multiple industries and geographies. Our experience spans healthcare, finance, government, manufacturing, and professional services, with implementations ranging from intelligent document processing to autonomous customer service agents.</p>
+    
+    <h3>Current Deployment Status</h3>
+    
+    <div class="stats-grid">
+        <div class="stat-box">
+            <span class="stat-number">5</span>
+            <span class="stat-label">Pilot Projects<br>Deployed</span>
+        </div>
+        
+        <div class="stat-box">
+            <span class="stat-number">4</span>
+            <span class="stat-label">Active<br>Implementations</span>
+        </div>
+        
+        <div class="stat-box">
+            <span class="stat-number">4</span>
+            <span class="stat-label">Global<br>Markets</span>
+        </div>
+        
+        <div class="stat-box">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Client<br>Satisfaction</span>
+        </div>
+    </div>
+    
+    <h2>Why Neural Arc for the IPC System</h2>
+    <p>Our unique combination of generative AI expertise, enterprise deployment experience, and proven track record makes Neural Arc the ideal partner for the Department of Health's IPC System project. We bring:</p>
+    
+    <ul>
+        <li><strong>Deep AI Expertise:</strong> Cutting-edge generative AI capabilities through Helium AI platform</li>
+        <li><strong>Enterprise Focus:</strong> Purpose-built solutions for business and government environments</li>
+        <li><strong>Proven Delivery:</strong> Five successful pilot projects and four active implementations</li>
+        <li><strong>Global Experience:</strong> Deployments across UK, Singapore, US, and India</li>
+        <li><strong>Healthcare Domain Knowledge:</strong> Specific experience in healthcare automation and patient care systems</li>
+        <li><strong>Security & Compliance:</strong> Deep understanding of regulatory requirements and data protection</li>
+        <li><strong>OutSystems Expertise:</strong> Certified architects and developers with government implementation experience</li>
+        <li><strong>Innovation Mindset:</strong> Continuous investment in R&D and emerging AI technologies</li>
+    </ul>
+    
+    <div class="highlight-box">
+        <h3>Our Commitment to Excellence</h3>
+        <p>At Neural Arc, we don't just deliver technology—we deliver transformation. Every project is an opportunity to push the boundaries of what's possible with AI, while maintaining the highest standards of quality, security, and user experience. Our success is measured not by the sophistication of our technology, but by the tangible value we create for our clients and their stakeholders.</p>
+    </div>
+</div>
+
+<!-- RFQ Understanding -->
+<div class="section page-break">
+    <h1>Understanding the RFQ</h1>
+    
+    <h2>Project Context</h2>
+    <p>The Department of Health (DoH) seeks a qualified technology partner to recover, complete, and deploy the partially developed International Patient Care (IPC) System built on the OutSystems platform. This is a critical system that manages the complete lifecycle of international patient treatment, from initial request through treatment completion and follow-up.</p>
+    
+    <h3>Current Situation</h3>
+    <p>The IPC system is currently under development but has encountered delivery challenges that require additional expertise to bring the system to full completion. DoH requires a partner who can:</p>
+    
+    <ul>
+        <li>Assess the current state of the partially developed system</li>
+        <li>Identify salvageable components versus those requiring rework</li>
+        <li>Complete remaining functional requirements</li>
+        <li>Integrate with multiple internal and external systems</li>
+        <li>Ensure security, compliance, and performance standards are met</li>
+        <li>Deliver an MVP as quickly as possible</li>
+        <li>Provide comprehensive training and knowledge transfer</li>
+    </ul>
+    
+    <h3>Key Stakeholders</h3>
+    <p>The IPC system serves multiple stakeholder groups, each with distinct needs:</p>
+    
+    <div class="card-container">
+        <div class="card">
+            <h4>Patients & Families</h4>
+            <ul>
+                <li>Submit treatment requests online</li>
+                <li>Track application status in real-time</li>
+                <li>Access medical documents and approvals</li>
+                <li>Receive notifications and updates</li>
+                <li>Request certificates and support</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>DoH Staff</h4>
+            <ul>
+                <li>Medical committee evaluation</li>
+                <li>Case coordination and management</li>
+                <li>Travel and logistics coordination</li>
+                <li>Financial authorization and tracking</li>
+                <li>Performance monitoring and reporting</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>Healthcare Providers</h4>
+            <ul>
+                <li>Receive treatment referrals</li>
+                <li>Schedule appointments</li>
+                <li>Submit medical reports</li>
+                <li>Coordinate with DoH</li>
+                <li>Track patient progress</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>Service Providers</h4>
+            <ul>
+                <li>Travel agents for booking services</li>
+                <li>Insurance companies for coverage</li>
+                <li>Banking partners for payments</li>
+                <li>Government agencies for data exchange</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h2>Scope of Work - Our Understanding</h2>
+    <p>Based on our comprehensive analysis of the RFQ document, we have mapped the requirements into the following scope of work:</p>
+    
+    <h3>1. System Recovery & Assessment</h3>
+    <div class="highlight-box">
+        <h4>What We Understand:</h4>
+        <ul>
+            <li>The IPC system is partially developed on OutSystems platform</li>
+            <li>Business Requirements Documents (BRDs) are already prepared and validated</li>
+            <li>Some components are functional while others require remediation or completion</li>
+            <li>DoH resources are embedded in the project and will work alongside the vendor</li>
+            <li>This is a co-delivery engagement, not a complete rebuild</li>
+        </ul>
+        
+        <h4>Our Approach:</h4>
+        <ul>
+            <li>Conduct comprehensive assessment within first 2 weeks</li>
+            <li>Apply salvage vs. rebuild framework to each component</li>
+            <li>Prioritize quick wins and accelerate MVP delivery</li>
+            <li>Leverage existing BRDs and DoH business analysts</li>
+            <li>Integrate seamlessly with DoH embedded resources</li>
+        </ul>
+    </div>
+    
+    <h3>2. Core Functional Requirements</h3>
+    <p>The IPC system must support the complete patient treatment journey with the following key capabilities:</p>
+    
+    <div class="workflow-diagram">
+        <h4 style="text-align: center; margin-bottom: 20px;">Patient Treatment Journey</h4>
+        
+        <div class="workflow-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h4>Registration & Authentication</h4>
+                <p>Multi-role access with UAE Pass, Active Directory, and OTP verification</p>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h4>Treatment Request Submission</h4>
+                <p>Online forms with document upload, auto-population from government sources, multilingual support</p>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Medical Committee Evaluation</h4>
+                <p>Review by DoH medical experts, integration with Malaffi/DHA/MOHAP for medical history, approval/rejection workflow</p>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h4>Case Coordination</h4>
+                <p>Assignment to coordinators, hospital appointment scheduling, document preparation</p>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+                <h4>Travel Coordination</h4>
+                <p>Visa processing, flight and hotel booking, transportation arrangements through approved agents</p>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">6</div>
+            <div class="step-content">
+                <h4>Treatment & Support</h4>
+                <p>Per-diem management, prepaid card issuance, escort coordination, ongoing communication</p>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">7</div>
+            <div class="step-content">
+                <h4>Post-Treatment</h4>
+                <p>Medical report collection, certificate generation, follow-up notifications, complaint handling</p>
+            </div>
+        </div>
+    </div>
+    
+    <h3>3. Integration Requirements</h3>
+    <p>The IPC system must integrate with 10+ external systems to enable seamless data exchange and workflow automation:</p>
+    
+    <div class="integration-diagram">
+        <h4>IPC System Integration Ecosystem</h4>
+        
+        <div class="integration-layer">
+            <h4>Government Platforms</h4>
+            <p>TAMM OS • UAE Pass • ICP • Tawtheeq • Family Book • Passport System</p>
+        </div>
+        
+        <div class="integration-arrow">↕</div>
+        
+        <div class="integration-layer" style="background: #000; color: #fff;">
+            <h4 style="color: #fff;">IPC SYSTEM (OutSystems)</h4>
+            <p>Core Platform with Business Rules Engine & Workflow Orchestration</p>
+        </div>
+        
+        <div class="integration-arrow">↕</div>
+        
+        <div class="integration-layer">
+            <h4>Healthcare Systems</h4>
+            <p>Malaffi • DHA • MOHAP • International Hospitals • IPP Payment System</p>
+        </div>
+        
+        <div class="integration-arrow">↕</div>
+        
+        <div class="integration-layer">
+            <h4>Support Services</h4>
+            <p>Travel Agents • Banking Partners • Insurance Companies • Communication Services</p>
+        </div>
+    </div>
+    
+    <h3>4. Technical Requirements</h3>
+    <p>Key technical requirements that shape our solution approach:</p>
+    
+    <div class="card-container">
+        <div class="card">
+            <h4>Platform & Infrastructure</h4>
+            <ul>
+                <li>OutSystems platform (existing)</li>
+                <li>Microsoft Azure Sovereign Cloud</li>
+                <li>Microsoft SQL Server database</li>
+                <li>Power BI for analytics</li>
+                <li>TAMM OS frontend framework</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>Performance & Scalability</h4>
+            <ul>
+                <li>99.9% system uptime</li>
+                <li>High-volume data handling (4.7TB+)</li>
+                <li>Real-time data synchronization</li>
+                <li>Horizontal and vertical scaling</li>
+                <li>24/7 availability</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>Security & Compliance</h4>
+            <ul>
+                <li>UAE Sovereign requirements</li>
+                <li>MCAF compliance</li>
+                <li>End-to-end encryption</li>
+                <li>OWASP security standards</li>
+                <li>DoH security policies</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>User Experience</h4>
+            <ul>
+                <li>Multilingual (Arabic/English)</li>
+                <li>Mobile-responsive design</li>
+                <li>Accessibility compliance</li>
+                <li>DoH UI/UX guidelines</li>
+                <li>6-minute service completion target</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h3>5. Data Migration Support</h3>
+    <p>The system contains over 4.7TB of historical patient data that must be migrated securely. Our understanding:</p>
+    <ul>
+        <li>DoH will lead the migration effort</li>
+        <li>Neural Arc will provide technical support and expertise</li>
+        <li>Data cleansing and mapping assistance required</li>
+        <li>Validation and integrity checks throughout migration</li>
+        <li>Secure handling with full auditability</li>
+    </ul>
+    
+    <h3>6. Training & Knowledge Transfer</h3>
+    <p>Comprehensive training programs required for multiple user groups:</p>
+    <ul>
+        <li><strong>DoH Technical Teams:</strong> 5-day program covering OutSystems, architecture, development, and support</li>
+        <li><strong>Business Users:</strong> 3-day program covering workflows, case management, and reporting</li>
+        <li><strong>System Administrators:</strong> 3-day program covering user management, monitoring, and security</li>
+        <li><strong>External Entities:</strong> 1-day program covering provider portals and communication</li>
+    </ul>
+</div>
+
+<!-- Solution Architecture -->
+<div class="section page-break">
+    <h1>Neural Arc Solution Architecture</h1>
+    
+    <h2>Our Integrated Approach</h2>
+    <p>Neural Arc proposes a comprehensive solution that combines proven OutSystems development expertise with intelligent automation capabilities powered by Helium AI. This integrated approach delivers a robust, scalable IPC system enhanced with AI-driven efficiency and insights.</p>
+    
+    <h3>Solution Components</h3>
+    
+    <div class="integration-diagram">
+        <h4>Neural Arc IPC Solution Architecture</h4>
+        
+        <div class="integration-layer">
+            <h4>Presentation Layer</h4>
+            <p>TAMM OS Frontend • OutSystems Web UI • Mobile Interfaces • Patient Portal</p>
+        </div>
+        
+        <div class="integration-arrow">↓</div>
+        
+        <div class="integration-layer" style="background: #f0f0f0;">
+            <h4>Helium AI Enhancement Layer</h4>
+            <p>Intelligent Document Processing • Request Triage • Recommendations • Predictive Analytics</p>
+        </div>
+        
+        <div class="integration-arrow">↓</div>
+        
+        <div class="integration-layer" style="background: #000; color: #fff;">
+            <h4 style="color: #fff;">Core Application Layer (OutSystems)</h4>
+            <p>Business Logic • Workflow Engine • Business Rules Engine • Case Management</p>
+        </div>
+        
+        <div class="integration-arrow">↓</div>
+        
+        <div class="integration-layer">
+            <h4>Integration Layer</h4>
+            <p>REST/SOAP APIs • Message Queues • Event Bus • Data Exchange Protocols</p>
+        </div>
+        
+        <div class="integration-arrow">↓</div>
+        
+        <div class="integration-layer">
+            <h4>Data & Analytics Layer</h4>
+            <p>SQL Server • Azure Blob Storage • Power BI • Document Management • Audit Logs</p>
+        </div>
+    </div>
+    
+    <h2>Helium AI Integration Strategy</h2>
+    <p>Helium AI will be integrated as an intelligent enhancement layer that augments the OutSystems-based IPC system without requiring fundamental architectural changes. This approach provides immediate value while maintaining system stability and compliance.</p>
+    
+    <h3>Phase 1: Intelligent Request Processing (MVP - Months 1-3)</h3>
+    
+    <div class="workflow-diagram">
+        <h4>AI-Enhanced Request Workflow</h4>
+        
+        <div class="workflow-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h4>Patient Submits Request</h4>
+                <p>Patient completes treatment request form with medical documents through TAMM OS interface</p>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h4>Helium AI: Intelligent Triage</h4>
+                <p><strong>Automated Actions:</strong></p>
+                <ul>
+                    <li>Extract key information from medical documents (diagnosis, treatment type, urgency)</li>
+                    <li>Validate completeness of submission (all required fields and documents present)</li>
+                    <li>Check eligibility against business rules (insurance coverage, prior approvals)</li>
+                    <li>Flag potential issues or missing information</li>
+                    <li>Assign preliminary priority score based on urgency and complexity</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Helium AI: Smart Routing</h4>
+                <p><strong>Intelligent Assignment:</strong></p>
+                <ul>
+                    <li>Suggest appropriate medical committee members based on specialty match</li>
+                    <li>Recommend case coordinator based on workload and expertise</li>
+                    <li>Identify similar historical cases for reference</li>
+                    <li>Generate preliminary assessment summary for reviewers</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h4>Medical Committee Review</h4>
+                <p>Human experts review with AI-generated insights and recommendations, make final approval decision</p>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+                <h4>Automated Workflow Continuation</h4>
+                <p>OutSystems workflow engine continues with case coordination, travel booking, and patient communication</p>
+            </div>
+        </div>
+    </div>
+    
+    <h3>Phase 2: Enhanced Intelligence (Months 4-5)</h3>
+    
+    <div class="feature-grid">
+        <div class="feature-box">
+            <h4>Medical History Analysis</h4>
+            <p>Helium AI integrates with Malaffi, DHA, and MOHAP to:</p>
+            <ul>
+                <li>Automatically retrieve patient medical history</li>
+                <li>Summarize relevant prior treatments</li>
+                <li>Identify contraindications</li>
+                <li>Generate comprehensive patient profiles</li>
+            </ul>
+        </div>
+        
+        <div class="feature-box">
+            <h4>Provider Recommendations</h4>
+            <p>AI-powered matching engine that:</p>
+            <ul>
+                <li>Suggests optimal healthcare providers</li>
+                <li>Considers treatment type and patient needs</li>
+                <li>Analyzes provider performance history</li>
+                <li>Recommends travel arrangements</li>
+            </ul>
+        </div>
+        
+        <div class="feature-box">
+            <h4>Predictive Insights</h4>
+            <p>Data-driven analytics for:</p>
+            <ul>
+                <li>Approval likelihood scoring</li>
+                <li>Treatment duration estimation</li>
+                <li>Cost prediction and budgeting</li>
+                <li>Resource demand forecasting</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h3>Phase 3: Advanced Capabilities (Post Go-Live)</h3>
+    
+    <div class="card-container">
+        <div class="card">
+            <h4>Conversational Interface</h4>
+            <p>Natural language query system enabling:</p>
+            <ul>
+                <li>Patients to check status in Arabic/English</li>
+                <li>Coordinators to retrieve information quickly</li>
+                <li>Automated responses to common questions</li>
+                <li>Intelligent search across cases and documents</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>Predictive Analytics Dashboard</h4>
+            <p>Advanced forecasting capabilities for:</p>
+            <ul>
+                <li>Treatment request volume prediction</li>
+                <li>Resource requirement planning</li>
+                <li>Trend analysis and pattern detection</li>
+                <li>Anomaly identification and alerting</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h2>Key Differentiators of Our Solution</h2>
+    
+    <div class="card-container">
+        <div class="card">
+            <h4>AI-Enhanced Efficiency</h4>
+            <p>Helium AI reduces manual processing time by 30-40% through intelligent automation, enabling DoH staff to focus on complex cases requiring human judgment.</p>
+        </div>
+        
+        <div class="card">
+            <h4>Improved Accuracy</h4>
+            <p>Automated validation and data extraction minimize errors and incomplete submissions, improving first-time approval rates and reducing rework.</p>
+        </div>
+        
+        <div class="card">
+            <h4>Better Decision Support</h4>
+            <p>AI-generated insights and recommendations provide medical committees with comprehensive information for faster, more informed decisions.</p>
+        </div>
+        
+        <div class="card">
+            <h4>Enhanced Patient Experience</h4>
+            <p>Faster processing, proactive communication, and self-service capabilities improve patient satisfaction and reduce support burden.</p>
+        </div>
+        
+        <div class="card">
+            <h4>Scalability Without Proportional Costs</h4>
+            <p>AI automation enables handling of increased request volumes without requiring proportional increases in staff, supporting DoH's growth.</p>
+        </div>
+        
+        <div class="card">
+            <h4>Continuous Improvement</h4>
+            <p>Machine learning capabilities enable the system to improve over time, learning from historical data and outcomes to enhance recommendations.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Scope Mapping -->
+<div class="section page-break">
+    <h1>Detailed Scope of Work Mapping</h1>
+    
+    <h2>Functional Requirements Mapping</h2>
+    <p>We have mapped each functional requirement from the RFQ to specific deliverables and implementation approaches:</p>
+    
+    <h3>1. Services Implementation</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>RFQ Requirement</th>
+                <th>Our Deliverable</th>
+                <th>Helium AI Enhancement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Transform IPC services into smart, automated self-services</td>
+                <td>Redesigned workflows with automation, self-service portals, 6-minute completion target</td>
+                <td>Intelligent form validation, auto-population, guided workflows</td>
+            </tr>
+            <tr>
+                <td>Leverage existing BRDs and Business Analysts</td>
+                <td>Requirements validation workshops, BRD refinement, gap analysis</td>
+                <td>Automated requirements analysis and completeness checking</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>2. Registration & Access</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>RFQ Requirement</th>
+                <th>Our Deliverable</th>
+                <th>Helium AI Enhancement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Multi-role secure registration and authentication</td>
+                <td>UAE Pass integration, Active Directory SSO, OTP verification, role-based access control</td>
+                <td>Intelligent duplicate detection, automated eligibility verification</td>
+            </tr>
+            <tr>
+                <td>Prevent duplicate registrations</td>
+                <td>Validation using Emirates ID, passport, and other identifiers</td>
+                <td>AI-powered fuzzy matching to detect potential duplicates</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>3. Treatment Request Management</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>RFQ Requirement</th>
+                <th>Our Deliverable</th>
+                <th>Helium AI Enhancement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Comprehensive treatment request submission</td>
+                <td>Online forms with document upload, auto-population from government sources, validation</td>
+                <td>Intelligent document extraction, completeness checking, preliminary assessment</td>
+            </tr>
+            <tr>
+                <td>Personalized dashboards for applicants and coordinators</td>
+                <td>Role-based dashboards with real-time status, document access, action items</td>
+                <td>AI-powered insights, priority recommendations, workload optimization</td>
+            </tr>
+            <tr>
+                <td>Multilingual submission (Arabic/English)</td>
+                <td>Fully bilingual interface with language switching, RTL support</td>
+                <td>Automatic translation assistance, multilingual document understanding</td>
+            </tr>
+            <tr>
+                <td>Integration with government data sources</td>
+                <td>APIs to ICP, Tawtheeq, Family Book, Passport systems for auto-population</td>
+                <td>Intelligent data validation and business rule application</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>4. Medical Committee Evaluation</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>RFQ Requirement</th>
+                <th>Our Deliverable</th>
+                <th>Helium AI Enhancement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Route requests to medical committee for review</td>
+                <td>Workflow engine with assignment rules, review interface, decision tracking</td>
+                <td>Smart routing based on specialty, workload, and expertise matching</td>
+            </tr>
+            <tr>
+                <td>Request additional information or seek opinions</td>
+                <td>Communication workflows, document request system, provider consultation</td>
+                <td>Automated information gap identification, suggested follow-up questions</td>
+            </tr>
+            <tr>
+                <td>Automated decision rules for auto-approve/reject</td>
+                <td>Business Rules Engine with configurable criteria, multi-hospital assignment</td>
+                <td>AI-powered eligibility scoring, historical outcome analysis</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>5. Case Coordination & Travel</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>RFQ Requirement</th>
+                <th>Our Deliverable</th>
+                <th>Helium AI Enhancement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Assign cases to coordinators based on business rules</td>
+                <td>Automated assignment with manual override, workload balancing, checklist workflows</td>
+                <td>Intelligent workload distribution, coordinator expertise matching</td>
+            </tr>
+            <tr>
+                <td>Appointment coordination with hospitals</td>
+                <td>Integration with hospital systems, appointment scheduling, confirmation tracking</td>
+                <td>Optimal scheduling recommendations, conflict detection</td>
+            </tr>
+            <tr>
+                <td>Travel coordination through approved agents</td>
+                <td>Visa processing, flight/hotel booking, transportation arrangements, document generation</td>
+                <td>Travel optimization recommendations, cost analysis</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>6. Supporting Services</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>RFQ Requirement</th>
+                <th>Our Deliverable</th>
+                <th>Helium AI Enhancement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Certificate generation (13 types)</td>
+                <td>Automated certificate generation in Arabic using templates, PDF export, digital signatures</td>
+                <td>Intelligent template selection, data validation</td>
+            </tr>
+            <tr>
+                <td>Escort management with approval workflow</td>
+                <td>Escort addition/removal, Emirates ID validation, automated approval for rule-based cases</td>
+                <td>Eligibility verification, relationship validation</td>
+            </tr>
+            <tr>
+                <td>Per-diem calculation and prepaid card management</td>
+                <td>Automated calculation using city-specific rates, weekly payment batches, card tracking</td>
+                <td>Anomaly detection, payment optimization</td>
+            </tr>
+            <tr>
+                <td>Complaint management from TAMM</td>
+                <td>Automated ingestion, categorization, workflow management, resolution tracking</td>
+                <td>Intelligent categorization, priority assignment, sentiment analysis</td>
+            </tr>
+            <tr>
+                <td>Quality & performance monitoring</td>
+                <td>User activity tracking, provider performance evaluation, SLA monitoring, reporting</td>
+                <td>Predictive performance analytics, trend identification</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>7. Integration & APIs</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>System</th>
+                <th>Integration Purpose</th>
+                <th>Our Implementation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>IPP (Payment System)</td>
+                <td>Send treatment records, sync changes, receive payment confirmations</td>
+                <td>REST APIs with real-time sync, error handling, retry logic</td>
+            </tr>
+            <tr>
+                <td>Malaffi</td>
+                <td>Pull patient medical history, apply business rules</td>
+                <td>Secure API integration with data caching, Helium AI summarization</td>
+            </tr>
+            <tr>
+                <td>DHA & MOHAP</td>
+                <td>Retrieve medical history, check active approvals</td>
+                <td>Multi-source data aggregation, conflict resolution</td>
+            </tr>
+            <tr>
+                <td>TAMM OS</td>
+                <td>Publish services, retrieve official documents</td>
+                <td>Frontend replication, API integration, real-time updates</td>
+            </tr>
+            <tr>
+                <td>International Hospitals</td>
+                <td>Appointment scheduling, medical records, modification requests</td>
+                <td>Standardized API layer, hospital-specific adapters</td>
+            </tr>
+            <tr>
+                <td>DoH Communication Services</td>
+                <td>SMS and email notifications</td>
+                <td>Template-based messaging, delivery tracking, Helium AI personalization</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>8. Dashboards & Reporting</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>RFQ Requirement</th>
+                <th>Our Deliverable</th>
+                <th>Helium AI Enhancement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Real-time operational dashboards</td>
+                <td>Role-based dashboards with KPIs, case status, workload metrics</td>
+                <td>AI-generated insights, anomaly highlighting, trend visualization</td>
+            </tr>
+            <tr>
+                <td>Power BI integration for advanced analytics</td>
+                <td>SQL Server backend, Power BI reports, custom visualizations, export capabilities</td>
+                <td>Predictive analytics, forecasting models, recommendation engine</td>
+            </tr>
+            <tr>
+                <td>Custom report generation</td>
+                <td>Report builder with filters, scheduling, export to Excel/PDF</td>
+                <td>Natural language report generation, automated insights</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>9. Non-Functional Requirements</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>RFQ Requirement</th>
+                <th>Our Implementation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Performance</td>
+                <td>99.9% uptime, real-time sync, high-volume handling</td>
+                <td>Load balancing, caching, horizontal scaling, performance monitoring</td>
+            </tr>
+            <tr>
+                <td>Security</td>
+                <td>UAE Sovereign, MCAF, OWASP, end-to-end encryption</td>
+                <td>Defense-in-depth architecture, continuous security scanning, audit logging</td>
+            </tr>
+            <tr>
+                <td>Scalability</td>
+                <td>Support growth in users, data, and services</td>
+                <td>Microservices architecture, cloud-native design, elastic scaling</td>
+            </tr>
+            <tr>
+                <td>Usability</td>
+                <td>Intuitive interfaces, 6-minute service completion, accessibility</td>
+                <td>User-centered design, usability testing, WCAG 2.1 compliance</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Implementation Timeline -->
+<div class="section page-break">
+    <h1>Implementation Timeline & Approach</h1>
+    
+    <h2>5-Month Delivery Plan</h2>
+    <p>Neural Arc proposes a structured 5-month implementation timeline that balances speed with quality, delivering an MVP by Month 3 while ensuring comprehensive testing, training, and production readiness.</p>
+    
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-marker">Month 1<br>Weeks 1-4</div>
+            <div class="timeline-content">
+                <h4>Project Initiation & System Assessment</h4>
+                <p><strong>Key Activities:</strong></p>
+                <ul>
+                    <li>Project kickoff and team mobilization (Week 1)</li>
+                    <li>Comprehensive assessment of existing IPC system (Weeks 1-2)</li>
+                    <li>Salvage vs. rebuild analysis for each component (Week 2)</li>
+                    <li>Requirements validation workshops with DoH stakeholders (Weeks 2-3)</li>
+                    <li>Architecture review and optimization plan (Week 3)</li>
+                    <li>Development environment setup and CI/CD pipeline (Week 3)</li>
+                    <li>Security onboarding with DoH SOC (Week 4)</li>
+                    <li>Detailed project plan and resource allocation (Week 4)</li>
+                </ul>
+                <p><strong>Deliverables:</strong> Assessment Report, Recovery Plan, Architecture Design, Project Charter</p>
+                <p><strong>Milestone Payment:</strong> 25% upon assessment completion</p>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-marker">Month 2<br>Weeks 5-8</div>
+            <div class="timeline-content">
+                <h4>Core Development - Sprint 1</h4>
+                <p><strong>Key Activities:</strong></p>
+                <ul>
+                    <li>Remediation of salvageable existing components</li>
+                    <li>Development of core patient journey workflows</li>
+                    <li>User registration and authentication (UAE Pass, AD, OTP)</li>
+                    <li>Treatment request submission with document upload</li>
+                    <li>Medical committee evaluation interface</li>
+                    <li>Basic integration with IPP and Malaffi</li>
+                    <li>Master framework development for frontend/backend</li>
+                    <li>Initial Helium AI integration (document processing, request triage)</li>
+                    <li>Unit testing and code quality checks</li>
+                    <li>Weekly demos to DoH stakeholders</li>
+                </ul>
+                <p><strong>Deliverables:</strong> Core workflows, authentication system, basic integrations, demo environment</p>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-marker">Month 3<br>Weeks 9-12</div>
+            <div class="timeline-content">
+                <h4>Core Development - Sprint 2 & MVP Delivery</h4>
+                <p><strong>Key Activities:</strong></p>
+                <ul>
+                    <li>Case coordinator assignment and workflows</li>
+                    <li>Travel coordination module with agent integration</li>
+                    <li>Document management and certificate generation (13 types)</li>
+                    <li>Provider management and coordination</li>
+                    <li>Basic dashboards and reporting</li>
+                    <li>TAMM OS frontend development</li>
+                    <li>Integration testing with external systems</li>
+                    <li>MVP deployment to staging environment</li>
+                    <li>Initial User Acceptance Testing (UAT) with DoH</li>
+                    <li>Feedback incorporation and refinement</li>
+                </ul>
+                <p><strong>Deliverables:</strong> Functional MVP, TAMM OS frontend, integration layer, UAT report</p>
+                <p><strong>Milestone Payment:</strong> 30% upon MVP delivery and UAT sign-off</p>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-marker">Month 4<br>Weeks 13-16</div>
+            <div class="timeline-content">
+                <h4>Enhancement & Complete Integration</h4>
+                <p><strong>Key Activities:</strong></p>
+                <ul>
+                    <li>Escort management with approval workflows</li>
+                    <li>Per-diem calculation engine and prepaid card management</li>
+                    <li>Complaint handling system with TAMM integration</li>
+                    <li>Quality and performance monitoring modules</li>
+                    <li>Advanced dashboards and Power BI integration</li>
+                    <li>Complete integration with all external systems (DHA, MOHAP, hospitals)</li>
+                    <li>Business Rules Engine (BRE) implementation</li>
+                    <li>Enhanced Helium AI features (medical history analysis, recommendations)</li>
+                    <li>Data migration support and validation</li>
+                    <li>Comprehensive functional and integration testing</li>
+                    <li>Performance and load testing</li>
+                </ul>
+                <p><strong>Deliverables:</strong> Complete feature set, all integrations, BRE, enhanced AI capabilities</p>
+                <p><strong>Milestone Payment:</strong> 25% upon feature completion</p>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-marker">Month 5<br>Weeks 17-20</div>
+            <div class="timeline-content">
+                <h4>Testing, Training & Go-Live</h4>
+                <p><strong>Key Activities:</strong></p>
+                <ul>
+                    <li>Security testing and penetration testing (Week 17)</li>
+                    <li>Performance and stress testing (Week 17)</li>
+                    <li>Final User Acceptance Testing (UAT) (Weeks 17-18)</li>
+                    <li>Defect resolution and system stabilization (Week 18)</li>
+                    <li>Training for DoH technical teams (Week 18)</li>
+                    <li>Training for business users and administrators (Week 19)</li>
+                    <li>Training for external entities (Week 19)</li>
+                    <li>Documentation completion (technical and user guides) (Week 19)</li>
+                    <li>Knowledge transfer sessions (Week 19)</li>
+                    <li>Production deployment preparation (Week 20)</li>
+                    <li>Go-live and hypercare support (Week 20)</li>
+                </ul>
+                <p><strong>Deliverables:</strong> Production-ready system, training materials, documentation, go-live support</p>
+                <p><strong>Milestone Payment:</strong> 20% upon go-live and knowledge transfer completion</p>
+            </div>
+        </div>
+    </div>
+    
+    <h2>Parallel Development Streams</h2>
+    <p>To accelerate delivery and maximize efficiency, we will organize work into five parallel development streams:</p>
+    
+    <div class="workflow-diagram">
+        <h4>Parallel Development Organization</h4>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Stream</th>
+                    <th>Focus Area</th>
+                    <th>Team Size</th>
+                    <th>Key Deliverables</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Stream 1</strong></td>
+                    <td>Core Patient Workflows</td>
+                    <td>5 resources</td>
+                    <td>Treatment request, medical committee, case coordination, approvals</td>
+                </tr>
+                <tr>
+                    <td><strong>Stream 2</strong></td>
+                    <td>Supporting Services</td>
+                    <td>4 resources</td>
+                    <td>Certificates, escorts, per-diem, complaints, quality monitoring</td>
+                </tr>
+                <tr>
+                    <td><strong>Stream 3</strong></td>
+                    <td>Integration Layer</td>
+                    <td>3 resources</td>
+                    <td>External APIs, data exchange, integration testing, error handling</td>
+                </tr>
+                <tr>
+                    <td><strong>Stream 4</strong></td>
+                    <td>Analytics & Reporting</td>
+                    <td>3 resources</td>
+                    <td>Dashboards, Power BI, KPIs, custom reports, data visualization</td>
+                </tr>
+                <tr>
+                    <td><strong>Stream 5</strong></td>
+                    <td>TAMM OS Frontend</td>
+                    <td>4 resources</td>
+                    <td>UI/UX design, frontend development, responsive design, accessibility</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <h2>Critical Path & Dependencies</h2>
+    <p>We have identified the critical path for project delivery to ensure timely completion:</p>
+    
+    <div class="highlight-box">
+        <h4>Critical Path Items:</h4>
+        <ol>
+            <li><strong>Assessment Completion (Week 3):</strong> Must complete before full-scale development begins</li>
+            <li><strong>Core Workflow Development (Weeks 5-8):</strong> Foundation for all other features</li>
+            <li><strong>Integration Layer (Weeks 9-16):</strong> Required for end-to-end functionality</li>
+            <li><strong>Security Approval (Week 17):</strong> Must pass DoH SOC review before production deployment</li>
+            <li><strong>UAT Sign-off (Week 19):</strong> Required for production go-live</li>
+        </ol>
+    </div>
+    
+    <h2>Risk Mitigation in Timeline</h2>
+    <p>Our timeline includes built-in buffers and mitigation strategies:</p>
+    <ul>
+        <li><strong>2-week buffer:</strong> Distributed across Months 4-5 for unexpected issues</li>
+        <li><strong>Parallel development:</strong> Reduces dependency risks and accelerates delivery</li>
+        <li><strong>Early integration testing:</strong> Identifies issues before they become blockers</li>
+        <li><strong>Continuous stakeholder engagement:</strong> Prevents late-stage requirement changes</li>
+        <li><strong>Phased UAT:</strong> Early feedback incorporation reduces final UAT duration</li>
+    </ul>
+</div>
+
+<!-- Commercial Proposal -->
+<div class="section page-break">
+    <h1>Commercial Proposal</h1>
+    
+    <h2>Pricing Philosophy</h2>
+    <p>Neural Arc's pricing is based on a transparent, value-driven model that reflects the actual effort required to deliver a high-quality IPC system. We believe in fair pricing that aligns our success with yours—when you succeed, we succeed.</p>
+    
+    <h3>Rate Structure</h3>
+    <div class="highlight-box">
+        <p><strong>Base Development Cost:</strong> $35/hour per resource (as specified)</p>
+        <p><strong>Overhead & Management:</strong> 40% (covers project management, quality assurance, infrastructure)</p>
+        <p><strong>Profit Margin:</strong> 20% (ensures sustainability and continued innovation)</p>
+        <p><strong>Effective Billing Rate:</strong> $58.80/hour per resource</p>
+    </div>
+    
+    <h2>Investment Breakdown by Phase</h2>
+    
+    <h3>Phase 1: Project Initiation & Assessment (Month 1)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Resource Type</th>
+                <th>Count</th>
+                <th>Hours/Week</th>
+                <th>Weeks</th>
+                <th>Total Hours</th>
+                <th>Rate</th>
+                <th>Cost (USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Project Manager</td>
+                <td>1</td>
+                <td>40</td>
+                <td>4</td>
+                <td>160</td>
+                <td>$58.80</td>
+                <td>$9,408</td>
+            </tr>
+            <tr>
+                <td>Solution Architect</td>
+                <td>1</td>
+                <td>40</td>
+                <td>4</td>
+                <td>160</td>
+                <td>$58.80</td>
+                <td>$9,408</td>
+            </tr>
+            <tr>
+                <td>Business Analyst</td>
+                <td>2</td>
+                <td>40</td>
+                <td>4</td>
+                <td>320</td>
+                <td>$58.80</td>
+                <td>$18,816</td>
+            </tr>
+            <tr>
+                <td>Senior OutSystems Developer</td>
+                <td>4</td>
+                <td>40</td>
+                <td>4</td>
+                <td>640</td>
+                <td>$58.80</td>
+                <td>$37,632</td>
+            </tr>
+            <tr>
+                <td>Integration Specialist</td>
+                <td>2</td>
+                <td>40</td>
+                <td>4</td>
+                <td>320</td>
+                <td>$58.80</td>
+                <td>$18,816</td>
+            </tr>
+            <tr>
+                <td>Security Specialist</td>
+                <td>1</td>
+                <td>40</td>
+                <td>4</td>
+                <td>160</td>
+                <td>$58.80</td>
+                <td>$9,408</td>
+            </tr>
+            <tr>
+                <td>DevOps Engineer</td>
+                <td>1</td>
+                <td>40</td>
+                <td>4</td>
+                <td>160</td>
+                <td>$58.80</td>
+                <td>$9,408</td>
+            </tr>
+            <tr>
+                <td colspan="6"><strong>Phase 1 Subtotal</strong></td>
+                <td><strong>$112,896</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>Phase 2: Core Development (Months 2-3)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Resource Type</th>
+                <th>Count</th>
+                <th>Hours/Week</th>
+                <th>Weeks</th>
+                <th>Total Hours</th>
+                <th>Rate</th>
+                <th>Cost (USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Project Manager</td>
+                <td>1</td>
+                <td>40</td>
+                <td>8</td>
+                <td>320</td>
+                <td>$58.80</td>
+                <td>$18,816</td>
+            </tr>
+            <tr>
+                <td>Solution Architect</td>
+                <td>1</td>
+                <td>40</td>
+                <td>8</td>
+                <td>320</td>
+                <td>$58.80</td>
+                <td>$18,816</td>
+            </tr>
+            <tr>
+                <td>Business Analyst</td>
+                <td>2</td>
+                <td>40</td>
+                <td>8</td>
+                <td>640</td>
+                <td>$58.80</td>
+                <td>$37,632</td>
+            </tr>
+            <tr>
+                <td>Senior OutSystems Developer</td>
+                <td>4</td>
+                <td>40</td>
+                <td>8</td>
+                <td>1,280</td>
+                <td>$58.80</td>
+                <td>$75,264</td>
+            </tr>
+            <tr>
+                <td>Frontend Developer</td>
+                <td>2</td>
+                <td>40</td>
+                <td>8</td>
+                <td>640</td>
+                <td>$58.80</td>
+                <td>$37,632</td>
+            </tr>
+            <tr>
+                <td>Integration Specialist</td>
+                <td>2</td>
+                <td>40</td>
+                <td>8</td>
+                <td>640</td>
+                <td>$58.80</td>
+                <td>$37,632</td>
+            </tr>
+            <tr>
+                <td>QA Engineer</td>
+                <td>2</td>
+                <td>40</td>
+                <td>8</td>
+                <td>640</td>
+                <td>$58.80</td>
+                <td>$37,632</td>
+            </tr>
+            <tr>
+                <td>Security Specialist</td>
+                <td>1</td>
+                <td>40</td>
+                <td>8</td>
+                <td>320</td>
+                <td>$58.80</td>
+                <td>$18,816</td>
+            </tr>
+            <tr>
+                <td>DevOps Engineer</td>
+                <td>1</td>
+                <td>40</td>
+                <td>8</td>
+                <td>320</td>
+                <td>$58.80</td>
+                <td>$18,816</td>
+            </tr>
+            <tr>
+                <td>Data Migration Specialist</td>
+                <td>1</td>
+                <td>40</td>
+                <td>8</td>
+                <td>320</td>
+                <td>$58.80</td>
+                <td>$18,816</td>
+            </tr>
+            <tr>
+                <td>AI/ML Engineer</td>
+                <td>1</td>
+                <td>40</td>
+                <td>8</td>
+                <td>320</td>
+                <td>$58.80</td>
+                <td>$18,816</td>
+            </tr>
+            <tr>
+                <td>Technical Writer</td>
+                <td>1</td>
+                <td>40</td>
+                <td>8</td>
+                <td>320</td>
+                <td>$58.80</td>
+                <td>$18,816</td>
+            </tr>
+            <tr>
+                <td colspan="6"><strong>Phase 2 Subtotal</strong></td>
+                <td><strong>$357,504</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>Phase 3: Enhancement & Integration (Month 4)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Resource Category</th>
+                <th>FTE Count</th>
+                <th>Hours/Week</th>
+                <th>Weeks</th>
+                <th>Total Hours</th>
+                <th>Rate</th>
+                <th>Cost (USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Full Development Team</td>
+                <td>19</td>
+                <td>40</td>
+                <td>4</td>
+                <td>3,040</td>
+                <td>$58.80</td>
+                <td>$178,752</td>
+            </tr>
+            <tr>
+                <td colspan="6"><strong>Phase 3 Subtotal</strong></td>
+                <td><strong>$178,752</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>Phase 4: Testing, Training & Go-Live (Month 5)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Resource Category</th>
+                <th>FTE Count</th>
+                <th>Hours/Week</th>
+                <th>Weeks</th>
+                <th>Total Hours</th>
+                <th>Rate</th>
+                <th>Cost (USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Testing & Training Team</td>
+                <td>15</td>
+                <td>40</td>
+                <td>4</td>
+                <td>2,400</td>
+                <td>$58.80</td>
+                <td>$141,120</td>
+            </tr>
+            <tr>
+                <td colspan="6"><strong>Phase 4 Subtotal</strong></td>
+                <td><strong>$141,120</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h3>Additional Project Costs</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Description</th>
+                <th>Cost (USD)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Helium AI Platform License</td>
+                <td>5-month enterprise subscription for AI capabilities and customization</td>
+                <td>$25,000</td>
+            </tr>
+            <tr>
+                <td>Training Materials Development</td>
+                <td>Comprehensive training materials in Arabic and English (presentations, videos, guides)</td>
+                <td>$15,000</td>
+            </tr>
+            <tr>
+                <td>Travel & Accommodation</td>
+                <td>Onsite presence for key team members (estimated 20 trips to Abu Dhabi)</td>
+                <td>$30,000</td>
+            </tr>
+            <tr>
+                <td>Third-Party Tools & Licenses</td>
+                <td>Testing tools, security scanning, performance monitoring, development tools</td>
+                <td>$10,000</td>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>Additional Costs Subtotal</strong></td>
+                <td><strong>$80,000</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="pricing-summary">
+        <h3>Total Project Investment</h3>
+        <div style="margin: 30px 0;">
+            <table style="color: #fff; border: none; background: transparent;">
+                <tbody>
+                    <tr>
+                        <td style="border: none; text-align: left; padding: 12px 0; font-size: 16px;">Phase 1: Assessment & Planning</td>
+                        <td style="border: none; text-align: right; padding: 12px 0; font-size: 16px;">$112,896</td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; text-align: left; padding: 12px 0; font-size: 16px;">Phase 2: Core Development & MVP</td>
+                        <td style="border: none; text-align: right; padding: 12px 0; font-size: 16px;">$357,504</td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; text-align: left; padding: 12px 0; font-size: 16px;">Phase 3: Enhancement & Integration</td>
+                        <td style="border: none; text-align: right; padding: 12px 0; font-size: 16px;">$178,752</td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; text-align: left; padding: 12px 0; font-size: 16px;">Phase 4: Testing, Training & Go-Live</td>
+                        <td style="border: none; text-align: right; padding: 12px 0; font-size: 16px;">$141,120</td>
+                    </tr>
+                    <tr>
+                        <td style="border: none; text-align: left; padding: 12px 0; font-size: 16px;">Additional Costs</td>
+                        <td style="border: none; text-align: right; padding: 12px 0; font-size: 16px;">$80,000</td>
+                    </tr>
+                    <tr style="border-top: 3px solid #fff;">
+                        <td style="border: none; text-align: left; font-size: 20px; padding-top: 20px; font-weight: 700;">TOTAL PROJECT COST</td>
+                        <td style="border: none; text-align: right; padding-top: 20px;"><div class="amount">$870,272</div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p style="margin-top: 20px; font-size: 16px; opacity: 0.9;">Approximately AED 3,195,000 (at current exchange rate)</p>
+    </div>
+    
+    <h2>Payment Schedule</h2>
+    <p>We propose a milestone-based payment structure that aligns payments with tangible deliverables:</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Milestone</th>
+                <th>Timeline</th>
+                <th>Percentage</th>
+                <th>Amount (USD)</th>
+                <th>Trigger Event</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Project Kickoff</td>
+                <td>Week 1</td>
+                <td>10%</td>
+                <td>$87,027</td>
+                <td>Contract signing and team mobilization</td>
+            </tr>
+            <tr>
+                <td>Assessment Complete</td>
+                <td>Week 3</td>
+                <td>15%</td>
+                <td>$130,541</td>
+                <td>Delivery and DoH approval of assessment report and recovery plan</td>
+            </tr>
+            <tr>
+                <td>MVP Delivery</td>
+                <td>Week 12</td>
+                <td>25%</td>
+                <td>$217,568</td>
+                <td>MVP deployed to staging environment and initial UAT completed</td>
+            </tr>
+            <tr>
+                <td>Feature Complete</td>
+                <td>Week 16</td>
+                <td>25%</td>
+                <td>$217,568</td>
+                <td>All features implemented, integrations complete, testing underway</td>
+            </tr>
+            <tr>
+                <td>UAT Sign-off</td>
+                <td>Week 19</td>
+                <td>15%</td>
+                <td>$130,541</td>
+                <td>UAT completion, defect resolution, production readiness approval</td>
+            </tr>
+            <tr>
+                <td>Go-Live & Knowledge Transfer</td>
+                <td>Week 20</td>
+                <td>10%</td>
+                <td>$87,027</td>
+                <td>Production deployment, training completion, knowledge transfer</td>
+            </tr>
+            <tr>
+                <td colspan="3"><strong>Total</strong></td>
+                <td colspan="2"><strong>$870,272</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h2>Value Proposition</h2>
+    <p>Our pricing delivers exceptional value through:</p>
+    
+    <div class="card-container">
+        <div class="card">
+            <h4>Senior Resources</h4>
+            <p>All team members are senior-level with 5+ years of relevant experience, ensuring high productivity and quality from day one.</p>
+        </div>
+        
+        <div class="card">
+            <h4>AI Innovation</h4>
+            <p>Helium AI integration provides 30-40% efficiency gains and improved decision-making at no additional per-transaction cost.</p>
+        </div>
+        
+        <div class="card">
+            <h4>Accelerated Delivery</h4>
+            <p>5-month timeline with MVP in Month 3 minimizes opportunity cost and enables faster realization of benefits.</p>
+        </div>
+        
+        <div class="card">
+            <h4>Knowledge Transfer</h4>
+            <p>Comprehensive training and documentation reduce long-term support costs and enable DoH self-sufficiency.</p>
+        </div>
+    </div>
+    
+    <h2>Cost Optimization Strategies</h2>
+    <ul>
+        <li><strong>Efficient Resource Allocation:</strong> Right-sizing team composition based on phase requirements</li>
+        <li><strong>Parallel Development:</strong> Maximizing productivity through concurrent work streams</li>
+        <li><strong>Reuse of Existing Assets:</strong> Leveraging salvageable components to minimize rework</li>
+        <li><strong>Automation:</strong> CI/CD pipelines and automated testing to reduce manual effort</li>
+        <li><strong>Offshore-Onshore Mix:</strong> Strategic use of offshore resources for development while maintaining onsite presence for stakeholder engagement</li>
+    </ul>
+</div>
+
+<!-- Terms & Conditions -->
+<div class="section page-break">
+    <h1>Terms & Conditions</h1>
+    
+    <h2>Project Governance</h2>
+    
+    <h3>Project Management Approach</h3>
+    <p>Neural Arc will employ an Agile project management methodology adapted for government healthcare environments:</p>
+    <ul>
+        <li><strong>Sprint Duration:</strong> 2-week sprints with clear deliverables and demos</li>
+        <li><strong>Daily Standups:</strong> 15-minute daily coordination meetings for the development team</li>
+        <li><strong>Weekly Status Reports:</strong> Comprehensive progress reports to DoH stakeholders</li>
+        <li><strong>Bi-Weekly Demos:</strong> Stakeholder demonstrations of completed functionality</li>
+        <li><strong>Monthly Steering Committee:</strong> Executive-level project review and decision-making</li>
+    </ul>
+    
+    <h3>Change Management</h3>
+    <p>Any changes to the agreed scope will follow a structured change management process:</p>
+    <ul>
+        <li><strong>Change Request Submission:</strong> Formal documentation of proposed changes</li>
+        <li><strong>Impact Assessment:</strong> Analysis of impact on timeline, cost, and resources</li>
+        <li><strong>Approval Process:</strong> Joint review and approval by DoH and Neural Arc</li>
+        <li><strong>Implementation:</strong> Controlled implementation with updated project plan</li>
+    </ul>
+    
+    <h2>Resource Management</h2>
+    
+    <h3>Resource Commitment</h3>
+    <ul>
+        <li><strong>Availability:</strong> All resources will be available within 15 days of project award</li>
+        <li><strong>Consistency:</strong> Resources will remain on the project for its full duration</li>
+        <li><strong>Replacement Policy:</strong> Any resource changes require prior written approval from DoH with 2-week notice</li>
+        <li><strong>Performance Monitoring:</strong> Monthly performance reviews against defined KPIs</li>
+        <li><strong>Escalation:</strong> Clear escalation path for resource performance issues</li>
+    </ul>
+    
+    <h3>Resource Performance KPIs</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>KPI</th>
+                <th>Target</th>
+                <th>Measurement</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Milestone Adherence</td>
+                <td>≥ 95%</td>
+                <td>% of milestones delivered on time</td>
+            </tr>
+            <tr>
+                <td>Code Quality</td>
+                <td>≥ 90%</td>
+                <td>SonarQube quality gate pass rate</td>
+            </tr>
+            <tr>
+                <td>Defect Resolution</td>
+                <td>≥ 95%</td>
+                <td>% of defects resolved within SLA</td>
+            </tr>
+            <tr>
+                <td>Resource Stability</td>
+                <td>≤ 1%</td>
+                <td>Unplanned resource turnover rate</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h2>Quality Assurance</h2>
+    
+    <h3>Testing Commitments</h3>
+    <ul>
+        <li><strong>Code Coverage:</strong> Minimum 80% unit test coverage for all components</li>
+        <li><strong>Integration Testing:</strong> 100% of integration points tested before UAT</li>
+        <li><strong>Performance Testing:</strong> System validated for 99.9% uptime and response time SLAs</li>
+        <li><strong>Security Testing:</strong> All critical, high, and medium vulnerabilities resolved before production</li>
+        <li><strong>UAT Success:</strong> ≥ 90% user satisfaction score in UAT feedback</li>
+    </ul>
+    
+    <h3>Defect Resolution SLAs</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Severity</th>
+                <th>Resolution Timeline</th>
+                <th>Commitment</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Critical</td>
+                <td>Before Production</td>
+                <td>100% resolution before go-live</td>
+            </tr>
+            <tr>
+                <td>High</td>
+                <td>Before Production</td>
+                <td>100% resolution before go-live</td>
+            </tr>
+            <tr>
+                <td>Medium</td>
+                <td>Before Production</td>
+                <td>100% resolution before go-live</td>
+            </tr>
+            <tr>
+                <td>Low</td>
+                <td>Within 2 Weeks</td>
+                <td>Resolution post go-live with tracking</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h2>Security & Compliance</h2>
+    
+    <h3>Security Commitments</h3>
+    <ul>
+        <li><strong>UAE Sovereign Compliance:</strong> All data processing within UAE, no data transfer outside UAE</li>
+        <li><strong>MCAF Compliance:</strong> Full adherence to Multi-Cloud Assurance Framework</li>
+        <li><strong>OWASP Standards:</strong> Compliance with OWASP Top 10 and security testing guidelines</li>
+        <li><strong>Encryption:</strong> AES-256 at rest, TLS 1.3+ in transit</li>
+        <li><strong>Access Control:</strong> Role-based access control (RBAC) with least privilege principle</li>
+        <li><strong>Audit Logging:</strong> Comprehensive audit trails for all data access and modifications</li>
+    </ul>
+    
+    <h3>Security Incident Response</h3>
+    <p>Neural Arc commits to the following incident response SLAs:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Priority</th>
+                <th>Acknowledgement</th>
+                <th>Resolution</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>P1 - Critical</td>
+                <td>Within 30 minutes</td>
+                <td>Within 2 hours</td>
+            </tr>
+            <tr>
+                <td>P2 - High</td>
+                <td>Within 1 hour</td>
+                <td>Within 4 hours</td>
+            </tr>
+            <tr>
+                <td>P3 - Medium</td>
+                <td>Within 1 hour</td>
+                <td>Within 24 hours</td>
+            </tr>
+            <tr>
+                <td>P4 - Low</td>
+                <td>Within 1 hour</td>
+                <td>Within 36 hours</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h2>Intellectual Property</h2>
+    <ul>
+        <li><strong>System Ownership:</strong> All IPC system code, configurations, and customizations will be owned by DoH</li>
+        <li><strong>Helium AI Platform:</strong> Helium AI platform remains Neural Arc intellectual property; DoH receives perpetual license for IPC system integration</li>
+        <li><strong>Documentation:</strong> All project documentation and training materials will be owned by DoH</li>
+        <li><strong>Third-Party Components:</strong> Appropriate licenses for all third-party components included</li>
+    </ul>
+    
+    <h2>Warranty & Support</h2>
+    
+    <h3>Warranty Period</h3>
+    <ul>
+        <li><strong>Duration:</strong> 90 days from go-live date</li>
+        <li><strong>Coverage:</strong> All defects in delivered functionality</li>
+        <li><strong>Response Time:</strong> As per security incident response SLAs</li>
+        <li><strong>Exclusions:</strong> Issues caused by DoH modifications, third-party system failures, or infrastructure issues</li>
+    </ul>
+    
+    <h3>Post-Warranty Support Options</h3>
+    <p>Neural Arc offers flexible support options beyond the warranty period:</p>
+    <ul>
+        <li><strong>Hypercare Support:</strong> 30 days of intensive support immediately following go-live (included in project cost)</li>
+        <li><strong>Extended Support:</strong> Optional ongoing support contracts available (quoted separately)</li>
+        <li><strong>Enhancement Services:</strong> Additional features and improvements (quoted per requirement)</li>
+        <li><strong>Helium AI Subscription:</strong> Continued access to AI capabilities (annual subscription model)</li>
+    </ul>
+    
+    <h2>Assumptions & Dependencies</h2>
+    
+    <h3>DoH Obligations</h3>
+    <ul>
+        <li>Access to existing IPC system codebase and documentation within 5 business days</li>
+        <li>Access to DoH Azure Sovereign Cloud environment for all project phases</li>
+        <li>Provision of necessary licenses for OutSystems, Azure, and other required tools</li>
+        <li>Workspace and facilities for onsite team members at DoH premises</li>
+        <li>Availability of DoH stakeholders for requirements validation, UAT, and approvals</li>
+        <li>Timely review and approval of deliverables (within 5 business days)</li>
+        <li>DoH integration team will lead external system integrations with vendor support</li>
+        <li>DoH will lead data migration activities with vendor technical support</li>
+    </ul>
+    
+    <h3>Scope Assumptions</h3>
+    <ul>
+        <li>Existing BRDs are substantially complete; only minor refinements needed</li>
+        <li>OutSystems licensing is in place and sufficient for project needs</li>
+        <li>Azure infrastructure is provisioned and ready for deployment</li>
+        <li>TAMM OS platform and DGE guidelines are available for frontend development</li>
+        <li>External system APIs are documented and accessible for integration</li>
+        <li>No major architectural changes to existing infrastructure required</li>
+    </ul>
+    
+    <h3>Commercial Assumptions</h3>
+    <ul>
+        <li>Pricing is based on 5-month project duration with specified resource allocation</li>
+        <li>Scope changes or extensions subject to change request process and additional costs</li>
+        <li>Payment terms are milestone-based as outlined above</li>
+        <li>Travel costs estimated based on 20 trips; actual costs may vary ±15%</li>
+        <li>Currency exchange rates fixed at time of contract signing</li>
+    </ul>
+    
+    <h2>Exclusions</h2>
+    <p>The following items are explicitly excluded from this proposal:</p>
+    <ul>
+        <li>OutSystems platform licensing costs (assumed to be provided by DoH)</li>
+        <li>Azure infrastructure costs (assumed to be provided by DoH)</li>
+        <li>Third-party system integration costs beyond IPC system scope</li>
+        <li>Hardware procurement or infrastructure setup</li>
+        <li>Ongoing operational support beyond 90-day warranty period</li>
+        <li>Training for more than 100 users (additional training quoted separately)</li>
+    </ul>
+</div>
+
+<!-- Conclusion -->
+<div class="section page-break">
+    <h1>Conclusion & Next Steps</h1>
+    
+    <h2>Why Neural Arc is Your Ideal Partner</h2>
+    <p>Neural Arc brings a unique combination of capabilities that make us the ideal partner for the IPC System recovery and implementation:</p>
+    
+    <div class="card-container">
+        <div class="card">
+            <h4>Generative AI Leadership</h4>
+            <p>As pioneers in generative AI, we bring cutting-edge capabilities that transform the IPC system from a traditional workflow platform into an intelligent, self-improving system.</p>
+        </div>
+        
+        <div class="card">
+            <h4>Proven Track Record</h4>
+            <p>With 5 completed pilot projects and 4 active implementations across global markets, we have demonstrated our ability to deliver complex AI solutions on time and within budget.</p>
+        </div>
+        
+        <div class="card">
+            <h4>Enterprise Focus</h4>
+            <p>Helium AI is purpose-built for enterprise and government environments, with security, compliance, and scalability as core design principles.</p>
+        </div>
+        
+        <div class="card">
+            <h4>OutSystems Expertise</h4>
+            <p>Our team includes certified OutSystems architects and developers with specific experience in government healthcare implementations.</p>
+        </div>
+        
+        <div class="card">
+            <h4>Global Experience</h4>
+            <p>Deployments across UK, Singapore, US, and India have equipped us with insights into diverse regulatory environments and best practices.</p>
+        </div>
+        
+        <div class="card">
+            <h4>Transparent Approach</h4>
+            <p>Clear pricing, realistic timelines, and honest communication ensure alignment and trust throughout the engagement.</p>
+        </div>
+    </div>
+    
+    <h2>Our Commitment to DoH</h2>
+    <p>Neural Arc commits to:</p>
+    
+    <div class="highlight-box">
+        <ul>
+            <li><strong>Accelerated Delivery:</strong> MVP in Month 3, full system in Month 5</li>
+            <li><strong>Senior Resources:</strong> Experienced team members from day one</li>
+            <li><strong>Quality Excellence:</strong> Rigorous testing and quality assurance throughout</li>
+            <li><strong>Security Compliance:</strong> Full adherence to UAE Sovereign and DoH requirements</li>
+            <li><strong>Knowledge Transfer:</strong> Comprehensive training enabling DoH self-sufficiency</li>
+            <li><strong>Transparent Communication:</strong> Regular updates and proactive issue escalation</li>
+            <li><strong>Partnership Mindset:</strong> Collaborative approach with DoH embedded resources</li>
+        </ul>
+    </div>
+    
+    <h2>Expected Outcomes</h2>
+    <p>Upon successful completion of this project, the Department of Health will have:</p>
+    
+    <div class="card-container">
+        <div class="card">
+            <h4>For Patients</h4>
+            <ul>
+                <li>Streamlined online request submission</li>
+                <li>Real-time status tracking</li>
+                <li>Secure document access</li>
+                <li>Faster processing times</li>
+                <li>Improved communication</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>For DoH Staff</h4>
+            <ul>
+                <li>30-40% reduction in manual work</li>
+                <li>AI-powered decision support</li>
+                <li>Comprehensive dashboards</li>
+                <li>Automated workflows</li>
+                <li>Better resource utilization</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>For Healthcare Providers</h4>
+            <ul>
+                <li>Simplified coordination with DoH</li>
+                <li>Faster approval turnaround</li>
+                <li>Streamlined documentation</li>
+                <li>Better communication</li>
+                <li>Improved scheduling</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>For DoH Organization</h4>
+            <ul>
+                <li>99.9% system availability</li>
+                <li>Full regulatory compliance</li>
+                <li>Real-time analytics and insights</li>
+                <li>Scalable infrastructure</li>
+                <li>Reduced operational costs</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h2>Next Steps</h2>
+    <p>Upon selection, Neural Arc is prepared to:</p>
+    
+    <div class="workflow-diagram">
+        <div class="workflow-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h4>Immediate Mobilization (Days 1-5)</h4>
+                <p>Contract finalization, team mobilization, access provisioning, kickoff meeting</p>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h4>Rapid Assessment (Days 6-15)</h4>
+                <p>System assessment, stakeholder interviews, architecture review, recovery plan development</p>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Full-Scale Development (Weeks 3-20)</h4>
+                <p>Parallel development streams, continuous integration, regular demos, stakeholder engagement</p>
+            </div>
+        </div>
+        
+        <div class="step-arrow">↓</div>
+        
+        <div class="workflow-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h4>Production Go-Live (Week 20)</h4>
+                <p>Production deployment, hypercare support, knowledge transfer, celebration of success</p>
+            </div>
+        </div>
+    </div>
+    
+    <h2>Contact Information</h2>
+    <div style="margin-top: 40px; padding: 30px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 8px;">
+        <h3 style="margin-top: 0;">For Questions or Clarifications</h3>
+        <p><strong>Neural Arc</strong></p>
+        <p>Email: proposals@neuralarc.ai</p>
+        <p>Phone: +971 XX XXX XXXX</p>
+        <p>Website: www.neuralarc.ai</p>
+        <p style="margin-top: 20px;"><strong>Primary Contact:</strong> Aniket Sharma, Founder</p>
+    </div>
+    
+    <div style="margin-top: 60px; text-align: center; padding: 30px; background: #000; color: #fff; border-radius: 8px;">
+        <h3 style="color: #fff; margin-bottom: 15px;">Thank You</h3>
+        <p>We appreciate the opportunity to submit this proposal and look forward to partnering with the Department of Health to deliver a world-class International Patient Care system that serves the citizens of Abu Dhabi with excellence.</p>
+    </div>
+</div>
+
+<div class="footer">
+    <p>&copy; 2025 Neural Arc. All rights reserved. | Confidential and Proprietary</p>
+    <p>This proposal is submitted in response to RFQ 651105000156 and is valid for 90 days from the date of submission.</p>
+</div>
